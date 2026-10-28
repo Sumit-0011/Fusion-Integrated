@@ -1,7 +1,7 @@
-# Static holiday list for tests (YYYY‑MM‑DD format)
+# Static holiday list for tests (YYYYMMDD format)
 import datetime
 
-# Example holidays – can be extended later
+# Example holidays - can be extended later
 def get_holidays(year: int) -> list[datetime.date]:
     return [
         datetime.date(year, 1, 1),   # New Year's Day
