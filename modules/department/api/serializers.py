@@ -165,8 +165,12 @@ class TAAllocationSerializer(serializers.ModelSerializer):
 class TAAllocationCreateSerializer(serializers.Serializer):
     student_id = serializers.IntegerField()
     student_name = serializers.CharField(max_length=150)
-    course_code = serializers.CharField(max_length=20, required=False, allow_blank=True, default="")
-    course_name = serializers.CharField(max_length=150, required=False, allow_blank=True, default="")
+    course_code = serializers.CharField(
+        max_length=20, required=False, allow_blank=True, default=""
+    )
+    course_name = serializers.CharField(
+        max_length=150, required=False, allow_blank=True, default=""
+    )
     faculty_id = serializers.IntegerField(required=False, allow_null=True, default=None)
     faculty_name = serializers.CharField(
         max_length=150, required=False, allow_blank=True, default=""
@@ -181,7 +185,9 @@ class TAAllocationCreateSerializer(serializers.Serializer):
         code = (attrs.get("course_code") or "").strip()
         fac = attrs.get("faculty_id")
         if not code and not fac:
-            raise serializers.ValidationError("TA allocation must link to a course, a faculty member, or both.")
+            raise serializers.ValidationError(
+                "TA allocation must link to a course, a faculty member, or both."
+            )
         return attrs
 
 

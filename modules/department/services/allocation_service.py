@@ -69,7 +69,10 @@ def allocate_teaching_assistant(
     if not student_id or not student_name.strip():
         raise BadRequestError("Student ID and Student Name are required.", code="missing_student")
     if not (course_code or "").strip() and not faculty_id:
-        raise BadRequestError("TA allocation must link to a course, a faculty member, or both.", code="missing_target")
+        raise BadRequestError(
+            "TA allocation must link to a course, a faculty member, or both.",
+            code="missing_target",
+        )
 
     return TAAllocation.objects.create(
         student_id=student_id,
