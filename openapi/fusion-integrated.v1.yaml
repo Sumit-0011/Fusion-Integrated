@@ -46,6 +46,405 @@ paths:
               schema:
                 $ref: '#/components/schemas/Ok'
           description: ''
+  /api/v1/department/allocations/supervisors/:
+    get:
+      operationId: v1_department_allocations_supervisors_list
+      description: List or create thesis supervisor allocations (AFR-OAP-043).
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedThesisSupervisorAllocationList'
+          description: ''
+    post:
+      operationId: v1_department_allocations_supervisors_create
+      description: List or create thesis supervisor allocations (AFR-OAP-043).
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThesisSupervisorAllocationCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ThesisSupervisorAllocationCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ThesisSupervisorAllocationCreate'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThesisSupervisorAllocationCreate'
+          description: ''
+  /api/v1/department/allocations/ta/:
+    get:
+      operationId: v1_department_allocations_ta_list
+      description: List or create TA allocations (AFR-OAP-044).
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTAAllocationList'
+          description: ''
+    post:
+      operationId: v1_department_allocations_ta_create
+      description: List or create TA allocations (AFR-OAP-044).
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TAAllocationCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TAAllocationCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TAAllocationCreate'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TAAllocationCreate'
+          description: ''
+  /api/v1/department/announcements/:
+    get:
+      operationId: v1_department_announcements_list
+      description: List or publish department announcements.
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDepartmentAnnouncementList'
+          description: ''
+    post:
+      operationId: v1_department_announcements_create
+      description: List or publish department announcements.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentAnnouncementCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DepartmentAnnouncementCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DepartmentAnnouncementCreate'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentAnnouncementCreate'
+          description: ''
+  /api/v1/department/pending/:
+    get:
+      operationId: v1_department_pending_list
+      description: Queue of seminar requests in AWAITING_SCHEDULING status (OA-UC-53).
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSeminarRequestList'
+          description: ''
+  /api/v1/department/requests/:
+    get:
+      operationId: v1_department_requests_list
+      description: List seminar requests visible to caller, or submit a new seminar
+        request (OA-UC-51).
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSeminarRequestList'
+          description: ''
+    post:
+      operationId: v1_department_requests_create
+      description: List seminar requests visible to caller, or submit a new seminar
+        request (OA-UC-51).
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeminarRequestCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SeminarRequestCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SeminarRequestCreate'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeminarRequestCreate'
+          description: ''
+  /api/v1/department/requests/{id}/:
+    get:
+      operationId: v1_department_requests_retrieve
+      description: Detail view or cancellation of a graduate seminar request.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeminarRequest'
+          description: ''
+    delete:
+      operationId: v1_department_requests_destroy
+      description: Detail view or cancellation of a graduate seminar request.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      security:
+      - iamSession: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/department/requests/{id}/reject/:
+    post:
+      operationId: v1_department_requests_reject_create
+      description: Department Administrator rejects a seminar request.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeminarReject'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SeminarReject'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SeminarReject'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeminarRequest'
+          description: ''
+  /api/v1/department/requests/{id}/schedule/:
+    post:
+      operationId: v1_department_requests_schedule_create
+      description: Department Administrator schedules a pending graduate seminar (OA-UC-53,
+        OA-BR-62).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GraduateSeminarSchedule'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GraduateSeminarSchedule'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GraduateSeminarSchedule'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GraduateSeminar'
+          description: ''
+  /api/v1/department/seminars/:
+    get:
+      operationId: v1_department_seminars_list
+      description: Scheduled graduate seminars viewable by students and faculty (AFR-OAP-049).
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedGraduateSeminarList'
+          description: ''
+  /api/v1/department/seminars/{id}/:
+    get:
+      operationId: v1_department_seminars_retrieve
+      description: Detail of a single scheduled seminar with history logs.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GraduateSeminar'
+          description: ''
   /api/v1/directory/users:
     get:
       operationId: v1_directory_users_retrieve
@@ -2315,6 +2714,65 @@ components:
         * `consent_failure` - Did not appear after consenting (r19)
         * `code_of_conduct` - Code of conduct (r21)
         * `misrepresentation` - False resume or unfair means (r18)
+    DepartmentAnnouncement:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        content:
+          type: string
+        department:
+          type: string
+          maxLength: 80
+        target_audience:
+          type: string
+          maxLength: 50
+        posted_by_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        posted_by_name:
+          type: string
+          maxLength: 150
+        is_pinned:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - content
+      - created_at
+      - id
+      - posted_by_id
+      - posted_by_name
+      - title
+    DepartmentAnnouncementCreate:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 255
+        content:
+          type: string
+        department:
+          type: string
+          default: ''
+          maxLength: 80
+        target_audience:
+          type: string
+          default: ALL
+          maxLength: 50
+        is_pinned:
+          type: boolean
+          default: false
+      required:
+      - content
+      - title
     Detail:
       type: object
       properties:
@@ -2423,6 +2881,103 @@ components:
       - fee_reference
       - season
       - user_id
+    GraduateSeminar:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        request_id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          readOnly: true
+        speaker_id:
+          type: integer
+          readOnly: true
+        speaker_name:
+          type: string
+          readOnly: true
+        scheduled_date:
+          type: string
+          format: date
+          readOnly: true
+        start_time:
+          type: string
+          format: time
+          readOnly: true
+        end_time:
+          type: string
+          format: time
+          readOnly: true
+        venue:
+          type: string
+          readOnly: true
+        session_chair:
+          type: string
+          readOnly: true
+        remarks:
+          type: string
+          readOnly: true
+        scheduled_by_id:
+          type: integer
+          readOnly: true
+        scheduled_by_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        history_logs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SeminarSchedulingHistory'
+          readOnly: true
+      required:
+      - created_at
+      - end_time
+      - history_logs
+      - id
+      - remarks
+      - request_id
+      - scheduled_by_id
+      - scheduled_by_name
+      - scheduled_date
+      - session_chair
+      - speaker_id
+      - speaker_name
+      - start_time
+      - title
+      - venue
+    GraduateSeminarSchedule:
+      type: object
+      properties:
+        scheduled_date:
+          type: string
+          format: date
+        start_time:
+          type: string
+          format: time
+        end_time:
+          type: string
+          format: time
+        venue:
+          type: string
+          maxLength: 100
+        session_chair:
+          type: string
+          default: ''
+          maxLength: 150
+        remarks:
+          type: string
+          default: ''
+      required:
+      - end_time
+      - scheduled_date
+      - start_time
+      - venue
     IncidentRecorded:
       type: object
       properties:
@@ -2943,6 +3498,44 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Company'
+    PaginatedDepartmentAnnouncementList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepartmentAnnouncement'
+    PaginatedGraduateSeminarList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/GraduateSeminar'
     PaginatedInterviewRoundList:
       type: object
       required:
@@ -3000,6 +3593,63 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Offer'
+    PaginatedSeminarRequestList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SeminarRequest'
+    PaginatedTAAllocationList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TAAllocation'
+    PaginatedThesisSupervisorAllocationList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ThesisSupervisorAllocation'
     PatchedJobPosting:
       type: object
       properties:
@@ -3598,6 +4248,159 @@ components:
         * `it` - IT / software
         * `core` - Core engineering
         * `other` - Other
+    SeminarReject:
+      type: object
+      properties:
+        reason:
+          type: string
+      required:
+      - reason
+    SeminarRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_id:
+          type: integer
+          readOnly: true
+        student_name:
+          type: string
+          readOnly: true
+        programme:
+          type: string
+          readOnly: true
+        department:
+          type: string
+          readOnly: true
+        topic:
+          type: string
+          readOnly: true
+        abstract:
+          type: string
+          readOnly: true
+        preferred_date:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        faculty_advisor_id:
+          type: integer
+          readOnly: true
+          nullable: true
+        faculty_advisor_name:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/SeminarRequestStatusEnum'
+          readOnly: true
+        rejection_reason:
+          type: string
+          readOnly: true
+        seminar:
+          allOf:
+          - $ref: '#/components/schemas/GraduateSeminar'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - abstract
+      - created_at
+      - department
+      - faculty_advisor_id
+      - faculty_advisor_name
+      - id
+      - preferred_date
+      - programme
+      - rejection_reason
+      - seminar
+      - status
+      - student_id
+      - student_name
+      - topic
+      - updated_at
+    SeminarRequestCreate:
+      type: object
+      properties:
+        topic:
+          type: string
+          maxLength: 255
+        abstract:
+          type: string
+        programme:
+          type: string
+          default: M.Tech
+          maxLength: 60
+        department:
+          type: string
+          default: ''
+          maxLength: 80
+        preferred_date:
+          type: string
+          format: date
+          nullable: true
+        faculty_advisor_id:
+          type: integer
+          nullable: true
+        faculty_advisor_name:
+          type: string
+          default: ''
+          maxLength: 150
+      required:
+      - abstract
+      - topic
+    SeminarRequestStatusEnum:
+      enum:
+      - AWAITING_SCHEDULING
+      - SCHEDULED
+      - REJECTED
+      - CANCELLED
+      type: string
+      description: |-
+        * `AWAITING_SCHEDULING` - Awaiting Scheduling
+        * `SCHEDULED` - Scheduled
+        * `REJECTED` - Rejected
+        * `CANCELLED` - Cancelled
+    SeminarSchedulingHistory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        seminar_id:
+          type: integer
+          readOnly: true
+        action:
+          type: string
+          readOnly: true
+        details:
+          type: string
+          readOnly: true
+        recorded_by_id:
+          type: integer
+          readOnly: true
+        recorded_by_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - action
+      - created_at
+      - details
+      - id
+      - recorded_by_id
+      - recorded_by_name
+      - seminar_id
     Session:
       type: object
       properties:
@@ -3698,6 +4501,192 @@ components:
           type: integer
       required:
       - document_id
+    TAAllocation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        student_name:
+          type: string
+          maxLength: 150
+        programme:
+          type: string
+          maxLength: 60
+        department:
+          type: string
+          maxLength: 80
+        course_code:
+          type: string
+          maxLength: 20
+        course_name:
+          type: string
+          maxLength: 150
+        faculty_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        faculty_name:
+          type: string
+          maxLength: 150
+        semester:
+          type: string
+          maxLength: 20
+        academic_year:
+          type: string
+          maxLength: 20
+        hours_per_week:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - course_code
+      - course_name
+      - created_at
+      - id
+      - student_id
+      - student_name
+    TAAllocationCreate:
+      type: object
+      properties:
+        student_id:
+          type: integer
+        student_name:
+          type: string
+          maxLength: 150
+        course_code:
+          type: string
+          default: ''
+          maxLength: 20
+        course_name:
+          type: string
+          default: ''
+          maxLength: 150
+        faculty_id:
+          type: integer
+          nullable: true
+        faculty_name:
+          type: string
+          default: ''
+          maxLength: 150
+        programme:
+          type: string
+          default: M.Tech
+          maxLength: 60
+        semester:
+          type: string
+          default: Monsoon
+          maxLength: 20
+        academic_year:
+          type: string
+          default: 2026-27
+          maxLength: 20
+        hours_per_week:
+          type: integer
+          default: 8
+        department:
+          type: string
+          default: ''
+          maxLength: 80
+      required:
+      - student_id
+      - student_name
+    ThesisSupervisorAllocation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        student_name:
+          type: string
+          maxLength: 150
+        programme:
+          type: string
+          maxLength: 60
+        department:
+          type: string
+          maxLength: 80
+        supervisor_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        supervisor_name:
+          type: string
+          maxLength: 150
+        co_supervisor_name:
+          type: string
+          maxLength: 150
+        thesis_topic:
+          type: string
+          maxLength: 255
+        academic_year:
+          type: string
+          maxLength: 20
+        status:
+          type: string
+          maxLength: 30
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - student_id
+      - student_name
+      - supervisor_id
+      - supervisor_name
+    ThesisSupervisorAllocationCreate:
+      type: object
+      properties:
+        student_id:
+          type: integer
+        student_name:
+          type: string
+          maxLength: 150
+        programme:
+          type: string
+          default: M.Tech
+          maxLength: 60
+        department:
+          type: string
+          default: ''
+          maxLength: 80
+        supervisor_id:
+          type: integer
+        supervisor_name:
+          type: string
+          maxLength: 150
+        co_supervisor_name:
+          type: string
+          default: ''
+          maxLength: 150
+        thesis_topic:
+          type: string
+          default: ''
+          maxLength: 255
+        academic_year:
+          type: string
+          default: 2026-27
+          maxLength: 20
+      required:
+      - student_id
+      - student_name
+      - supervisor_id
+      - supervisor_name
     TopicEnum:
       enum:
       - drive

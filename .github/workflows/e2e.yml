@@ -47,6 +47,8 @@ jobs:
           # The service's own pg_restore, so the client never outruns the server's version.
           docker exec -i "$PG_CONTAINER" pg_restore -U fusion_admin -d fusionlab --no-owner \
             < "$RUNNER_TEMP/fusion-dev.dump"
+          psql -d fusionlab -c \
+            "CREATE OR REPLACE VIEW examination_student_grades AS SELECT * FROM online_cms_student_grades;"
           users=$(psql -d fusionlab -tAc "select count(*) from auth_user")
           echo "restored $users accounts"
           test "$users" -gt 0
@@ -126,7 +128,9 @@ jobs:
 
       - name: Keep the report and server logs
         if: failure()
-        run: cp "$RUNNER_TEMP"/*.log client/test-results/ 2>/dev/null || true
+        run: |
+          mkdir -p client/test-results
+          cp "$RUNNER_TEMP"/*.log client/test-results/ 2>/dev/null || true
       - if: failure()
         uses: actions/upload-artifact@v4
         with:

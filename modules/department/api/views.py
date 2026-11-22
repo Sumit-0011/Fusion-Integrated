@@ -7,6 +7,7 @@ Fail-closed authorization:
 """
 from __future__ import annotations
 
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
@@ -15,6 +16,11 @@ from rest_framework.views import APIView
 from core.api.exceptions import NotFoundError
 from fusion_auth.permissions import HasModuleGrant, HasPermission
 from modules.department.api import serializers as s
+from modules.department.models import (
+    DepartmentAnnouncement,
+    TAAllocation,
+    ThesisSupervisorAllocation,
+)
 from modules.department.selectors import seminar as selectors
 from modules.department.services import allocation_service, seminar_service
 
@@ -69,11 +75,13 @@ class SeminarRequestDetailView(APIView):
             raise NotFoundError(f"Seminar request #{pk} not found.", code="not_found")
         return req
 
+    @extend_schema(responses=s.SeminarRequestSerializer)
     def get(self, request, pk: int):
         HasPermission("department.seminar.view_self")().has_permission(request, self)
         req = self._get_request(pk)
         return Response(s.SeminarRequestSerializer(req).data)
 
+    @extend_schema(responses=s.SeminarRequestSerializer)
     def delete(self, request, pk: int):
         HasPermission("department.seminar.request")().has_permission(request, self)
         req = seminar_service.cancel_seminar_request(_actor(request), pk)
@@ -93,6 +101,10 @@ class ScheduleSeminarView(APIView):
     """Department Administrator schedules a pending graduate seminar (OA-UC-53, OA-BR-62)."""
     permission_classes = [MODULE, HasPermission("department.seminar.schedule")]
 
+    @extend_schema(
+        request=s.GraduateSeminarScheduleSerializer,
+        responses=s.GraduateSeminarSerializer,
+    )
     def post(self, request, pk: int):
         payload = s.GraduateSeminarScheduleSerializer(data=request.data)
         payload.is_valid(raise_exception=True)
@@ -117,6 +129,10 @@ class RejectSeminarView(APIView):
     """Department Administrator rejects a seminar request."""
     permission_classes = [MODULE, HasPermission("department.seminar.schedule")]
 
+    @extend_schema(
+        request=s.SeminarRejectSerializer,
+        responses=s.SeminarRequestSerializer,
+    )
     def post(self, request, pk: int):
         payload = s.SeminarRejectSerializer(data=request.data)
         payload.is_valid(raise_exception=True)
@@ -150,6 +166,7 @@ class ScheduledSeminarDetailView(generics.RetrieveAPIView):
 class TAAllocationListCreateView(generics.ListCreateAPIView):
     """List or create TA allocations (AFR-OAP-044)."""
     permission_classes = [MODULE]
+    queryset = TAAllocation.objects.none()
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -157,6 +174,8 @@ class TAAllocationListCreateView(generics.ListCreateAPIView):
         return s.TAAllocationSerializer
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return TAAllocation.objects.none()
         if not HasPermission("department.allocation.view")().has_permission(self.request, self):
             raise PermissionDenied("You do not have permission to view allocations.")
         return selectors.visible_ta_allocations(_actor(self.request))
@@ -188,6 +207,7 @@ class TAAllocationListCreateView(generics.ListCreateAPIView):
 class SupervisorAllocationListCreateView(generics.ListCreateAPIView):
     """List or create thesis supervisor allocations (AFR-OAP-043)."""
     permission_classes = [MODULE]
+    queryset = ThesisSupervisorAllocation.objects.none()
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -195,6 +215,8 @@ class SupervisorAllocationListCreateView(generics.ListCreateAPIView):
         return s.ThesisSupervisorAllocationSerializer
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return ThesisSupervisorAllocation.objects.none()
         if not HasPermission("department.allocation.view")().has_permission(self.request, self):
             raise PermissionDenied("You do not have permission to view allocations.")
         return selectors.visible_supervisor_allocations(_actor(self.request))
@@ -227,6 +249,7 @@ class SupervisorAllocationListCreateView(generics.ListCreateAPIView):
 class AnnouncementListCreateView(generics.ListCreateAPIView):
     """List or publish department announcements."""
     permission_classes = [MODULE]
+    queryset = DepartmentAnnouncement.objects.none()
 
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -234,6 +257,8 @@ class AnnouncementListCreateView(generics.ListCreateAPIView):
         return s.DepartmentAnnouncementSerializer
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return DepartmentAnnouncement.objects.none()
         if not HasPermission("department.announcement.view")().has_permission(self.request, self):
             raise PermissionDenied("You do not have permission to view announcements.")
         return selectors.published_announcements()
