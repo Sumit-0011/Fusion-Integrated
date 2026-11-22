@@ -1,10 +1,11 @@
 """Pure-Python tests for Department domain eligibility (OA-BR-61)."""
 import datetime
+
 from modules.department.domain.eligibility import (
-    is_pg_student,
     check_seminar_eligibility,
-    validate_seminar_request,
+    is_pg_student,
     validate_scheduling_parameters,
+    validate_seminar_request,
 )
 
 
@@ -136,3 +137,4 @@ def test_validate_scheduling_parameters_missing_venue():
     )
     assert valid is False
     assert "Venue is required" in msg
+

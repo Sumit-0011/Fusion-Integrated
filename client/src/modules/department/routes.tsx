@@ -29,3 +29,4 @@ export const routes: RouteObject[] = [
   { path: "allocations", element: <AllocationsPage /> },
   { path: "announcements", element: <AnnouncementsPage /> },
 ];
+

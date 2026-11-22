@@ -1,19 +1,20 @@
 from modules.department.selectors.seminar import (
-    visible_seminar_requests,
     pending_seminar_requests,
+    published_announcements,
     scheduled_seminars,
     seminar_history_for_seminar,
-    visible_ta_allocations,
+    visible_seminar_requests,
     visible_supervisor_allocations,
-    published_announcements,
+    visible_ta_allocations,
 )
 
 __all__ = [
-    "visible_seminar_requests",
     "pending_seminar_requests",
+    "published_announcements",
     "scheduled_seminars",
     "seminar_history_for_seminar",
-    "visible_ta_allocations",
+    "visible_seminar_requests",
     "visible_supervisor_allocations",
-    "published_announcements",
+    "visible_ta_allocations",
 ]
+

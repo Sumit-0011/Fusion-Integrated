@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from dataclasses import dataclass
+
 from modules.department.models.seminar import GraduateSeminar
 
 
@@ -71,3 +72,4 @@ def get_department_no_dues_clearances(
         )
         for uid in ids
     }
+

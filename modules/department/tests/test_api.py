@@ -1,16 +1,13 @@
 """DRF API tests for Department module."""
 import datetime
+
 import pytest
 from rest_framework.test import APIClient
-from conftest import make_session
 
+from conftest import make_session
 from modules.department.models.seminar import (
-    SeminarSchedulingRequest,
     GraduateSeminar,
-)
-from modules.department.models.allocation import (
-    TAAllocation,
-    ThesisSupervisorAllocation,
+    SeminarSchedulingRequest,
 )
 
 pytestmark = pytest.mark.django_db

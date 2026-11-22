@@ -1,10 +1,3 @@
-export interface Page<T> {
-  results: T[];
-  count?: number;
-  next?: string | null;
-  previous?: string | null;
-}
-
 export interface SeminarSchedulingHistory {
   id: number;
   seminar_id: number;
@@ -112,3 +105,4 @@ export interface DepartmentAnnouncement {
   is_pinned: boolean;
   created_at: string;
 }
+

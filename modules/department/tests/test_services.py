@@ -1,19 +1,13 @@
 """Tests for Department service layer."""
 import datetime
-import pytest
-from core.api.exceptions import BadRequestError, NotFoundError
 
-from modules.department.services import seminar_service, allocation_service
+import pytest
+
+from core.api.exceptions import BadRequestError
 from modules.department.models.seminar import (
-    SeminarSchedulingRequest,
-    GraduateSeminar,
     SeminarSchedulingHistory,
 )
-from modules.department.models.allocation import (
-    ThesisSupervisorAllocation,
-    TAAllocation,
-)
-from modules.department.models.announcement import DepartmentAnnouncement
+from modules.department.services import allocation_service, seminar_service
 
 pytestmark = pytest.mark.django_db
 
@@ -221,3 +215,4 @@ def test_allocations_and_announcements():
     )
     assert ann.pk is not None
     assert ann.is_pinned is True
+

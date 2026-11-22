@@ -10,7 +10,6 @@ import {
   TextInput,
   Textarea,
   Badge,
-  Select,
   Switch,
   SimpleGrid,
 } from "@mantine/core";
@@ -31,7 +30,7 @@ export default function AnnouncementsPage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [department, setDepartment] = useState("Computer Science & Engineering");
-  const [targetAudience, setTargetAudience] = useState("ALL");
+  const [targetAudience] = useState("ALL");
   const [isPinned, setIsPinned] = useState(false);
 
   if (error) return <Container size="xl"><ErrorState error={error} /></Container>;
@@ -151,12 +150,6 @@ export default function AnnouncementsPage() {
             value={department}
             onChange={(e) => setDepartment(e.currentTarget.value)}
           />
-          <Select
-            label="Target Audience"
-            data={["ALL", "STUDENTS", "FACULTY", "SCHOLARS"]}
-            value={targetAudience}
-            onChange={(val) => setTargetAudience(val || "ALL")}
-          />
           <Switch
             label="Pin announcement to top"
             checked={isPinned}
@@ -175,3 +168,4 @@ export default function AnnouncementsPage() {
     </Container>
   );
 }
+

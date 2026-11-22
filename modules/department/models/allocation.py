@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from django.db import models
+
 from core.db.mixins import TimeStampedModel
 
 
@@ -51,4 +52,8 @@ class TAAllocation(TimeStampedModel):
         ]
 
     def __str__(self) -> str:
-        return f"TA: {self.student_name} for {self.course_code} ({self.semester} {self.academic_year})"
+        return (
+            f"TA: {self.student_name} for {self.course_code} "
+            f"({self.semester} {self.academic_year})"
+        )
+

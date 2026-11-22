@@ -2,16 +2,17 @@
 from __future__ import annotations
 
 from rest_framework import serializers
-from modules.department.models.seminar import (
-    SeminarSchedulingRequest,
-    GraduateSeminar,
-    SeminarSchedulingHistory,
-)
+
 from modules.department.models.allocation import (
-    ThesisSupervisorAllocation,
     TAAllocation,
+    ThesisSupervisorAllocation,
 )
 from modules.department.models.announcement import DepartmentAnnouncement
+from modules.department.models.seminar import (
+    GraduateSeminar,
+    SeminarSchedulingHistory,
+    SeminarSchedulingRequest,
+)
 
 
 class SeminarSchedulingHistorySerializer(serializers.ModelSerializer):
@@ -86,7 +87,9 @@ class SeminarRequestCreateSerializer(serializers.Serializer):
     department = serializers.CharField(max_length=80, required=False, allow_blank=True, default="")
     preferred_date = serializers.DateField(required=False, allow_null=True, default=None)
     faculty_advisor_id = serializers.IntegerField(required=False, allow_null=True, default=None)
-    faculty_advisor_name = serializers.CharField(max_length=150, required=False, allow_blank=True, default="")
+    faculty_advisor_name = serializers.CharField(
+        max_length=150, required=False, allow_blank=True, default=""
+    )
 
 
 class GraduateSeminarScheduleSerializer(serializers.Serializer):
@@ -94,7 +97,9 @@ class GraduateSeminarScheduleSerializer(serializers.Serializer):
     start_time = serializers.TimeField()
     end_time = serializers.TimeField()
     venue = serializers.CharField(max_length=100)
-    session_chair = serializers.CharField(max_length=150, required=False, allow_blank=True, default="")
+    session_chair = serializers.CharField(
+        max_length=150, required=False, allow_blank=True, default=""
+    )
     remarks = serializers.CharField(required=False, allow_blank=True, default="")
 
 
@@ -128,8 +133,12 @@ class ThesisSupervisorAllocationCreateSerializer(serializers.Serializer):
     department = serializers.CharField(max_length=80, required=False, allow_blank=True, default="")
     supervisor_id = serializers.IntegerField()
     supervisor_name = serializers.CharField(max_length=150)
-    co_supervisor_name = serializers.CharField(max_length=150, required=False, allow_blank=True, default="")
-    thesis_topic = serializers.CharField(max_length=255, required=False, allow_blank=True, default="")
+    co_supervisor_name = serializers.CharField(
+        max_length=150, required=False, allow_blank=True, default=""
+    )
+    thesis_topic = serializers.CharField(
+        max_length=255, required=False, allow_blank=True, default=""
+    )
     academic_year = serializers.CharField(max_length=20, default="2026-27")
 
 
@@ -159,7 +168,9 @@ class TAAllocationCreateSerializer(serializers.Serializer):
     course_code = serializers.CharField(max_length=20)
     course_name = serializers.CharField(max_length=150)
     faculty_id = serializers.IntegerField(required=False, allow_null=True, default=None)
-    faculty_name = serializers.CharField(max_length=150, required=False, allow_blank=True, default="")
+    faculty_name = serializers.CharField(
+        max_length=150, required=False, allow_blank=True, default=""
+    )
     programme = serializers.CharField(max_length=60, default="M.Tech")
     semester = serializers.CharField(max_length=20, default="Monsoon")
     academic_year = serializers.CharField(max_length=20, default="2026-27")

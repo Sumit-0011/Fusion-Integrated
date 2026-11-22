@@ -1,21 +1,22 @@
-from modules.department.models.seminar import (
-    SeminarSchedulingRequest,
-    GraduateSeminar,
-    SeminarSchedulingHistory,
-)
 from modules.department.models.allocation import (
-    ThesisSupervisorAllocation,
     TAAllocation,
+    ThesisSupervisorAllocation,
 )
 from modules.department.models.announcement import (
     DepartmentAnnouncement,
 )
+from modules.department.models.seminar import (
+    GraduateSeminar,
+    SeminarSchedulingHistory,
+    SeminarSchedulingRequest,
+)
 
 __all__ = [
-    "SeminarSchedulingRequest",
+    "DepartmentAnnouncement",
     "GraduateSeminar",
     "SeminarSchedulingHistory",
-    "ThesisSupervisorAllocation",
+    "SeminarSchedulingRequest",
     "TAAllocation",
-    "DepartmentAnnouncement",
+    "ThesisSupervisorAllocation",
 ]
+

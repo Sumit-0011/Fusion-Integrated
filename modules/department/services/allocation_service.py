@@ -2,11 +2,11 @@
 from __future__ import annotations
 
 from django.db import transaction
-from core.api.exceptions import BadRequestError, NotFoundError
 
+from core.api.exceptions import BadRequestError
 from modules.department.models.allocation import (
-    ThesisSupervisorAllocation,
     TAAllocation,
+    ThesisSupervisorAllocation,
 )
 from modules.department.models.announcement import DepartmentAnnouncement
 
@@ -28,7 +28,10 @@ def allocate_thesis_supervisor(
     if not student_id or not student_name.strip():
         raise BadRequestError("Student ID and Student Name are required.", code="missing_student")
     if not supervisor_id or not supervisor_name.strip():
-        raise BadRequestError("Supervisor ID and Supervisor Name are required.", code="missing_supervisor")
+        raise BadRequestError(
+            "Supervisor ID and Supervisor Name are required.",
+            code="missing_supervisor",
+        )
 
     alloc, _ = ThesisSupervisorAllocation.objects.update_or_create(
         student_id=student_id,
@@ -68,7 +71,7 @@ def allocate_teaching_assistant(
     if not course_code or not course_code.strip():
         raise BadRequestError("Course code is required.", code="missing_course")
 
-    alloc = TAAllocation.objects.create(
+    return TAAllocation.objects.create(
         student_id=student_id,
         student_name=student_name.strip(),
         course_code=course_code.strip().upper(),
@@ -81,7 +84,6 @@ def allocate_teaching_assistant(
         hours_per_week=hours_per_week,
         department=department.strip(),
     )
-    return alloc
 
 
 @transaction.atomic
@@ -111,3 +113,4 @@ def create_announcement(
         posted_by_name=user_name,
         is_pinned=is_pinned,
     )
+

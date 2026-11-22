@@ -33,7 +33,10 @@ def check_seminar_eligibility(programme: str | None) -> EligibilityResult:
     if not is_pg_student(programme):
         return EligibilityResult(
             allowed=False,
-            reason="Only postgraduate (PG) students are eligible to request graduate seminar scheduling (OA-BR-61)."
+            reason=(
+                "Only postgraduate (PG) students are eligible to request graduate "
+                "seminar scheduling (OA-BR-61)."
+            ),
         )
     return EligibilityResult(allowed=True, reason="Eligible for graduate seminar scheduling.")
 
@@ -74,3 +77,4 @@ def validate_scheduling_parameters(
     if not venue or not venue.strip():
         return False, "Venue is required for scheduling the graduate seminar."
     return True, "Valid scheduling parameters."
+

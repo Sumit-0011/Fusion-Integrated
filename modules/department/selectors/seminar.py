@@ -2,16 +2,17 @@
 from __future__ import annotations
 
 from django.db.models import QuerySet
-from modules.department.models.seminar import (
-    SeminarSchedulingRequest,
-    GraduateSeminar,
-    SeminarSchedulingHistory,
-)
+
 from modules.department.models.allocation import (
-    ThesisSupervisorAllocation,
     TAAllocation,
+    ThesisSupervisorAllocation,
 )
 from modules.department.models.announcement import DepartmentAnnouncement
+from modules.department.models.seminar import (
+    GraduateSeminar,
+    SeminarSchedulingHistory,
+    SeminarSchedulingRequest,
+)
 
 P_VIEW_ALL = "department.seminar.view_all"
 
@@ -45,7 +46,11 @@ def pending_seminar_requests(actor=None) -> QuerySet[SeminarSchedulingRequest]:
 
 def scheduled_seminars(department: str = "") -> QuerySet[GraduateSeminar]:
     """All scheduled seminars ordered by date and time (AFR-OAP-049)."""
-    qs = GraduateSeminar.objects.select_related("request").all().order_by("-scheduled_date", "-start_time")
+    qs = (
+        GraduateSeminar.objects.select_related("request")
+        .all()
+        .order_by("-scheduled_date", "-start_time")
+    )
     if department:
         qs = qs.filter(request__department=department)
     return qs
@@ -80,3 +85,4 @@ def visible_supervisor_allocations(actor=None) -> QuerySet[ThesisSupervisorAlloc
 def published_announcements() -> QuerySet[DepartmentAnnouncement]:
     """All published department announcements."""
     return DepartmentAnnouncement.objects.all()
+

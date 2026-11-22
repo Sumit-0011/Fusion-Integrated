@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from django.db import models
+
 from core.db.mixins import TimeStampedModel
 
 
@@ -92,3 +93,4 @@ class SeminarSchedulingHistory(TimeStampedModel):
 
     def __str__(self) -> str:
         return f"History #{self.pk} for Seminar #{self.seminar_id}: {self.action}"
+

@@ -2,19 +2,20 @@
 from __future__ import annotations
 
 import datetime
-from django.db import transaction
-from core.api.exceptions import BadRequestError, NotFoundError, PermissionDeniedError
 
+from django.db import transaction
+
+from core.api.exceptions import BadRequestError, NotFoundError, PermissionDeniedError
 from modules.department.domain import eligibility
 from modules.department.domain.state_machine import (
-    SeminarStatus,
     SeminarEvent,
+    SeminarStatus,
     can_transition,
 )
 from modules.department.models.seminar import (
-    SeminarSchedulingRequest,
     GraduateSeminar,
     SeminarSchedulingHistory,
+    SeminarSchedulingRequest,
 )
 
 
@@ -70,7 +71,7 @@ def submit_seminar_request(
         )
 
     # 4. Create request in AWAITING_SCHEDULING status
-    req = SeminarSchedulingRequest.objects.create(
+    return SeminarSchedulingRequest.objects.create(
         student_id=user_id,
         student_name=_get_user_name(actor),
         programme=programme,
@@ -82,7 +83,6 @@ def submit_seminar_request(
         faculty_advisor_name=faculty_advisor_name.strip(),
         status=SeminarStatus.AWAITING_SCHEDULING.value,
     )
-    return req
 
 
 @transaction.atomic
@@ -102,7 +102,7 @@ def schedule_graduate_seminar(
         raise NotFoundError(f"Seminar request #{request_id} not found.", code="not_found")
 
     # 1. Guard check: Status must be Awaiting Scheduling (OA-BR-62)
-    allowed, msg, _ = can_transition(req.status, SeminarEvent.SCHEDULE.value)
+    allowed, _msg, _ = can_transition(req.status, SeminarEvent.SCHEDULE.value)
     if not allowed:
         raise BadRequestError(
             f"Cannot schedule seminar: request #{request_id} is in status '{req.status}' "
@@ -190,8 +190,15 @@ def cancel_seminar_request(
         raise NotFoundError(f"Seminar request #{request_id} not found.", code="not_found")
 
     user_id = _get_user_id(actor)
-    if req.student_id != user_id and not (hasattr(actor, "has_permission") and actor.has_permission("department.seminar.schedule")):
-        raise PermissionDeniedError("You may only cancel your own seminar requests.", code="permission_denied")
+    is_schedule_admin = (
+        hasattr(actor, "has_permission")
+        and actor.has_permission("department.seminar.schedule")
+    )
+    if req.student_id != user_id and not is_schedule_admin:
+        raise PermissionDeniedError(
+            "You may only cancel your own seminar requests.",
+            code="permission_denied",
+        )
 
     allowed, msg, _ = can_transition(req.status, SeminarEvent.CANCEL.value)
     if not allowed:
@@ -200,3 +207,4 @@ def cancel_seminar_request(
     req.status = SeminarStatus.CANCELLED.value
     req.save(update_fields=["status", "updated_at"])
     return req
+

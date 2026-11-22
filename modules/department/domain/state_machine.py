@@ -11,11 +11,11 @@ Business Rules:
 """
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 from typing import NamedTuple
 
 
-class SeminarStatus(str, Enum):
+class SeminarStatus(StrEnum):
     NO_SUBMITTED_REQUEST = "NO_SUBMITTED_REQUEST"
     AWAITING_SCHEDULING = "AWAITING_SCHEDULING"
     SCHEDULED = "SCHEDULED"
@@ -23,7 +23,7 @@ class SeminarStatus(str, Enum):
     CANCELLED = "CANCELLED"
 
 
-class SeminarEvent(str, Enum):
+class SeminarEvent(StrEnum):
     SUBMIT = "SUBMIT"
     SCHEDULE = "SCHEDULE"
     REJECT = "REJECT"
@@ -97,3 +97,4 @@ def get_next_status(current_status: str, event: str) -> str:
     if not allowed or rule is None:
         raise ValueError(msg)
     return rule.to_status.value
+

@@ -13,10 +13,9 @@ from rest_framework.views import APIView
 
 from core.api.exceptions import NotFoundError
 from fusion_auth.permissions import HasModuleGrant, HasPermission
-
 from modules.department.api import serializers as s
 from modules.department.selectors import seminar as selectors
-from modules.department.services import seminar_service, allocation_service
+from modules.department.services import allocation_service, seminar_service
 
 MODULE = HasModuleGrant("department")
 
@@ -212,7 +211,10 @@ class SupervisorAllocationListCreateView(generics.ListCreateAPIView):
             academic_year=data.get("academic_year", "2026-27"),
             department=data.get("department", ""),
         )
-        return Response(s.ThesisSupervisorAllocationSerializer(alloc).data, status=status.HTTP_201_CREATED)
+        return Response(
+            s.ThesisSupervisorAllocationSerializer(alloc).data,
+            status=status.HTTP_201_CREATED,
+        )
 
 
 class AnnouncementListCreateView(generics.ListCreateAPIView):
@@ -242,4 +244,8 @@ class AnnouncementListCreateView(generics.ListCreateAPIView):
             target_audience=data.get("target_audience", "ALL"),
             is_pinned=data.get("is_pinned", False),
         )
-        return Response(s.DepartmentAnnouncementSerializer(ann).data, status=status.HTTP_201_CREATED)
+        return Response(
+            s.DepartmentAnnouncementSerializer(ann).data,
+            status=status.HTTP_201_CREATED,
+        )
+

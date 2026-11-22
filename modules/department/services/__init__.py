@@ -1,21 +1,22 @@
-from modules.department.services.seminar_service import (
-    submit_seminar_request,
-    schedule_graduate_seminar,
-    reject_seminar_request,
-    cancel_seminar_request,
-)
 from modules.department.services.allocation_service import (
-    allocate_thesis_supervisor,
     allocate_teaching_assistant,
+    allocate_thesis_supervisor,
     create_announcement,
+)
+from modules.department.services.seminar_service import (
+    cancel_seminar_request,
+    reject_seminar_request,
+    schedule_graduate_seminar,
+    submit_seminar_request,
 )
 
 __all__ = [
-    "submit_seminar_request",
-    "schedule_graduate_seminar",
-    "reject_seminar_request",
-    "cancel_seminar_request",
-    "allocate_thesis_supervisor",
     "allocate_teaching_assistant",
+    "allocate_thesis_supervisor",
+    "cancel_seminar_request",
     "create_announcement",
+    "reject_seminar_request",
+    "schedule_graduate_seminar",
+    "submit_seminar_request",
 ]
+

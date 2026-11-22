@@ -11,7 +11,6 @@ import {
   TextInput,
   Badge,
   NumberInput,
-  Select,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { FaUserPlus, FaUsers, FaChalkboardTeacher } from "react-icons/fa";
@@ -53,7 +52,7 @@ export default function AllocationsPage() {
   const [supSupervisorId, setSupSupervisorId] = useState<number | string>("");
   const [supSupervisorName, setSupSupervisorName] = useState("");
   const [supTopic, setSupTopic] = useState("");
-  const [supProgramme, setSupProgramme] = useState("Ph.D.");
+  const [supProgramme] = useState("Ph.D.");
 
   if (taError || supError) {
     return <Container size="xl"><ErrorState error={taError || supError} /></Container>;
@@ -373,13 +372,6 @@ export default function AllocationsPage() {
               onChange={(e) => setSupSupervisorName(e.currentTarget.value)}
             />
           </Group>
-          <Select
-            label="Academic Programme"
-            data={["Ph.D.", "M.Tech", "M.Des"]}
-            value={supProgramme}
-            onChange={(val: string | null) => setSupProgramme(val || "Ph.D.")}
-            required
-          />
           <TextInput
             label="Thesis Topic"
             placeholder="e.g. Edge Computing in Healthcare"
@@ -399,3 +391,4 @@ export default function AllocationsPage() {
     </Container>
   );
 }
+
