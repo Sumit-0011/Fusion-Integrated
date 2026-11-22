@@ -3,7 +3,7 @@
 Student 1 (git author name): Sumit-0011
 Student 2 (git author name): Sparsh Shukla
 Design commit (hash and subject): a816014 spec(department): freeze FR, UC, BR, and WF test designs
-Baseline commit (hash and subject): PENDING_BASELINE_COMMIT
+Baseline commit (hash and subject): 3cc9beb spec(department): baseline test suite and initial triage log
 Student 1's 10/10 commit the baseline ran on (hash): cc263862976c15bc8e80723dbe1cc73b2792f1bb
 
 ## Results
