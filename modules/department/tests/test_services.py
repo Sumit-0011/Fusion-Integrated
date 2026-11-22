@@ -30,7 +30,7 @@ def test_submit_seminar_request_success():
         abstract="Comprehensive study of adaptive filtering using transformers.",
         programme="M.Tech",
         department="CSE",
-        preferred_date=datetime.date(2026, 11, 20),
+        preferred_date=datetime.date.today() + datetime.timedelta(days=14),
         faculty_advisor_id=202,
         faculty_advisor_name="Dr. Advisor",
     )

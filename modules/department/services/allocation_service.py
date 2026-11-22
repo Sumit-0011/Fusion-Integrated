@@ -68,13 +68,13 @@ def allocate_teaching_assistant(
     """Record a departmental TA assignment (AFR-OAP-044)."""
     if not student_id or not student_name.strip():
         raise BadRequestError("Student ID and Student Name are required.", code="missing_student")
-    if not course_code or not course_code.strip():
-        raise BadRequestError("Course code is required.", code="missing_course")
+    if not (course_code or "").strip() and not faculty_id:
+        raise BadRequestError("TA allocation must link to a course, a faculty member, or both.", code="missing_target")
 
     return TAAllocation.objects.create(
         student_id=student_id,
         student_name=student_name.strip(),
-        course_code=course_code.strip().upper(),
+        course_code=(course_code or "").strip().upper(),
         course_name=course_name.strip(),
         faculty_id=faculty_id,
         faculty_name=faculty_name.strip(),

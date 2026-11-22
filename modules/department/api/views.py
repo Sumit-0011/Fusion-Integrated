@@ -8,6 +8,7 @@ Fail-closed authorization:
 from __future__ import annotations
 
 from rest_framework import generics, status
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -107,7 +108,9 @@ class ScheduleSeminarView(APIView):
             session_chair=data.get("session_chair", ""),
             remarks=data.get("remarks", ""),
         )
-        return Response(s.GraduateSeminarSerializer(seminar).data, status=status.HTTP_201_CREATED)
+        resp_data = s.GraduateSeminarSerializer(seminar).data
+        resp_data["status"] = "SCHEDULED"
+        return Response(resp_data, status=status.HTTP_201_CREATED)
 
 
 class RejectSeminarView(APIView):
@@ -154,11 +157,13 @@ class TAAllocationListCreateView(generics.ListCreateAPIView):
         return s.TAAllocationSerializer
 
     def get_queryset(self):
-        HasPermission("department.allocation.view")().has_permission(self.request, self)
+        if not HasPermission("department.allocation.view")().has_permission(self.request, self):
+            raise PermissionDenied("You do not have permission to view allocations.")
         return selectors.visible_ta_allocations(_actor(self.request))
 
     def create(self, request, *args, **kwargs):
-        HasPermission("department.allocation.manage")().has_permission(request, self)
+        if not HasPermission("department.allocation.manage")().has_permission(request, self):
+            raise PermissionDenied("You do not have permission to manage allocations.")
         payload = s.TAAllocationCreateSerializer(data=request.data)
         payload.is_valid(raise_exception=True)
         data = payload.validated_data
@@ -167,8 +172,8 @@ class TAAllocationListCreateView(generics.ListCreateAPIView):
             actor=_actor(request),
             student_id=data["student_id"],
             student_name=data["student_name"],
-            course_code=data["course_code"],
-            course_name=data["course_name"],
+            course_code=data.get("course_code", ""),
+            course_name=data.get("course_name", ""),
             faculty_id=data.get("faculty_id"),
             faculty_name=data.get("faculty_name", ""),
             programme=data.get("programme", "M.Tech"),
@@ -190,11 +195,13 @@ class SupervisorAllocationListCreateView(generics.ListCreateAPIView):
         return s.ThesisSupervisorAllocationSerializer
 
     def get_queryset(self):
-        HasPermission("department.allocation.view")().has_permission(self.request, self)
+        if not HasPermission("department.allocation.view")().has_permission(self.request, self):
+            raise PermissionDenied("You do not have permission to view allocations.")
         return selectors.visible_supervisor_allocations(_actor(self.request))
 
     def create(self, request, *args, **kwargs):
-        HasPermission("department.allocation.manage")().has_permission(request, self)
+        if not HasPermission("department.allocation.manage")().has_permission(request, self):
+            raise PermissionDenied("You do not have permission to manage allocations.")
         payload = s.ThesisSupervisorAllocationCreateSerializer(data=request.data)
         payload.is_valid(raise_exception=True)
         data = payload.validated_data
@@ -227,11 +234,13 @@ class AnnouncementListCreateView(generics.ListCreateAPIView):
         return s.DepartmentAnnouncementSerializer
 
     def get_queryset(self):
-        HasPermission("department.announcement.view")().has_permission(self.request, self)
+        if not HasPermission("department.announcement.view")().has_permission(self.request, self):
+            raise PermissionDenied("You do not have permission to view announcements.")
         return selectors.published_announcements()
 
     def create(self, request, *args, **kwargs):
-        HasPermission("department.announcement.publish")().has_permission(request, self)
+        if not HasPermission("department.announcement.publish")().has_permission(request, self):
+            raise PermissionDenied("You do not have permission to publish announcements.")
         payload = s.DepartmentAnnouncementCreateSerializer(data=request.data)
         payload.is_valid(raise_exception=True)
         data = payload.validated_data

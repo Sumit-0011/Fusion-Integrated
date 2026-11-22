@@ -34,7 +34,7 @@ def test_student_submit_seminar_request(stub_iam):
         "abstract": "We evaluate spatial-temporal GNN architectures on benchmark datasets.",
         "programme": "M.Tech",
         "department": "CSE",
-        "preferred_date": "2026-11-20",
+        "preferred_date": (datetime.date.today() + datetime.timedelta(days=14)).isoformat(),
     }
     resp = c.post("/api/v1/department/requests/", data=payload, format="json")
     assert resp.status_code == 201
