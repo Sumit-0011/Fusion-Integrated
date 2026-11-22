@@ -24,8 +24,21 @@ def future_date(days: int = 14) -> datetime.date:
 
 
 @pytest.fixture
-def make_dept_client(stub_iam):
+def make_dept_client(stub_iam, monkeypatch):
     """Factory fixture returning an authenticated APIClient with requested session details."""
+    tokens: dict[str, object] = {}
+    fake = stub_iam()
+
+    orig_resolve = fake.resolve_session
+
+    def _resolve_session(*, auth_token=None, cookies=None):
+        fake.calls.append(("resolve_session", auth_token))
+        if auth_token and auth_token in tokens:
+            return tokens[auth_token]
+        return orig_resolve(auth_token=auth_token, cookies=cookies)
+
+    monkeypatch.setattr(fake, "resolve_session", _resolve_session)
+
     def _create(
         user_id: int = 101,
         role: str = "student",
@@ -42,9 +55,10 @@ def make_dept_client(stub_iam):
             permissions=perms,
             modules=modules,
         )
-        stub_iam(session)
+        token = f"tok-{user_id}-{role}-{len(tokens)}"
+        tokens[token] = session
         client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION=f"Token tok-{user_id}-{role}")
+        client.credentials(HTTP_AUTHORIZATION=f"Token {token}")
         return client
 
     return _create

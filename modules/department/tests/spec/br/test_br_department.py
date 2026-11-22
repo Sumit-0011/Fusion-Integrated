@@ -168,13 +168,17 @@ def test_br_dep_008_ta_allocation_integrity(admin_client):
     assert TAAllocation.objects.filter(student_id=1101, course_code="CS201").exists()
 
 
-def test_br_dep_009_public_calendar_scheduled_only(admin_client, student_client, faculty_client):
+def test_br_dep_009_public_calendar_scheduled_only(admin_client, make_dept_client, faculty_client):
     """BR-DEP-009 | OA-BR-63 visibility-scheduled-only.
 
     Verify OA-BR-63 ensures public calendar displays only seminars in SCHEDULED status.
     """
+    s1 = make_dept_client(user_id=1001, role="student")
+    s2 = make_dept_client(user_id=1002, role="student")
+    s3 = make_dept_client(user_id=1003, role="student")
+
     # Request 1: Remains in AWAITING_SCHEDULING
-    student_client.post(
+    s1.post(
         "/api/v1/department/requests/",
         data={
             "topic": "Pending Topic - Hidden from Calendar",
@@ -187,7 +191,7 @@ def test_br_dep_009_public_calendar_scheduled_only(admin_client, student_client,
     )
 
     # Request 2: Rejected
-    r2 = student_client.post(
+    r2 = s2.post(
         "/api/v1/department/requests/",
         data={
             "topic": "Rejected Topic - Hidden from Calendar",
@@ -201,7 +205,7 @@ def test_br_dep_009_public_calendar_scheduled_only(admin_client, student_client,
     admin_client.post(f"/api/v1/department/requests/{r2.data['id']}/reject/", data={"reason": "Rejected"}, format="json")
 
     # Request 3: Scheduled
-    r3 = student_client.post(
+    r3 = s3.post(
         "/api/v1/department/requests/",
         data={
             "topic": "Confirmed Seminar - Visible on Calendar",
