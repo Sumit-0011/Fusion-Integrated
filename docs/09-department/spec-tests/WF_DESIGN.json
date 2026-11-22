@@ -1,0 +1,65 @@
+[
+  {
+    "test_id": "WF-DEP-001",
+    "source_id": "BW-OAP-09 submit-transition",
+    "purpose": "Verify workflow path from NO_SUBMITTED_REQUEST to AWAITING_SCHEDULING via SUBMIT event.",
+    "preconditions": "Postgraduate student with no active pending seminar request.",
+    "action_or_input": "Student initiates and submits graduate seminar request with valid details.",
+    "expected_result": "State transitions to AWAITING_SCHEDULING; can_transition returns allowed=True.",
+    "test_type": "Workflow / Primary Path"
+  },
+  {
+    "test_id": "WF-DEP-002",
+    "source_id": "BW-OAP-09 schedule-transition",
+    "purpose": "Verify workflow path from AWAITING_SCHEDULING to SCHEDULED via SCHEDULE event by Department Administrator.",
+    "preconditions": "Request in AWAITING_SCHEDULING exists. Department Administrator schedules the seminar.",
+    "action_or_input": "Administrator performs SCHEDULE action with complete seminar details.",
+    "expected_result": "State transitions to SCHEDULED (terminal success state); GraduateSeminar record is created.",
+    "test_type": "Workflow / Terminal Path"
+  },
+  {
+    "test_id": "WF-DEP-003",
+    "source_id": "BW-OAP-09 reject-transition",
+    "purpose": "Verify workflow path from AWAITING_SCHEDULING to REJECTED via REJECT event by Department Administrator.",
+    "preconditions": "Request in AWAITING_SCHEDULING exists. Department Administrator decides to reject.",
+    "action_or_input": "Administrator performs REJECT action with rejection reason.",
+    "expected_result": "State transitions to REJECTED (terminal rejected state); rejection reason recorded.",
+    "test_type": "Workflow / Alternate Terminal Path"
+  },
+  {
+    "test_id": "WF-DEP-004",
+    "source_id": "BW-OAP-09 cancel-transition",
+    "purpose": "Verify workflow path from AWAITING_SCHEDULING to CANCELLED via CANCEL event by student.",
+    "preconditions": "Request in AWAITING_SCHEDULING exists. Request owner decides to withdraw.",
+    "action_or_input": "Student executes CANCEL event on the pending request.",
+    "expected_result": "State transitions to CANCELLED (terminal cancelled state).",
+    "test_type": "Workflow / Alternate Terminal Path"
+  },
+  {
+    "test_id": "WF-DEP-005",
+    "source_id": "BW-OAP-09 invalid-transition-from-scheduled",
+    "purpose": "Verify illegal transition attempt: Attempting to schedule an already SCHEDULED seminar is rejected.",
+    "preconditions": "Request is in SCHEDULED terminal state.",
+    "action_or_input": "Attempt to trigger SCHEDULE or SUBMIT event on this request.",
+    "expected_result": "Workflow state machine refuses transition with can_transition returning allowed=False.",
+    "test_type": "Workflow / Guard Negative"
+  },
+  {
+    "test_id": "WF-DEP-006",
+    "source_id": "BW-OAP-09 invalid-transition-from-rejected",
+    "purpose": "Verify illegal transition attempt: Attempting to schedule a REJECTED request is rejected.",
+    "preconditions": "Request is in REJECTED terminal state.",
+    "action_or_input": "Attempt to trigger SCHEDULE event on the rejected request.",
+    "expected_result": "Workflow state machine refuses transition with can_transition returning allowed=False.",
+    "test_type": "Workflow / Guard Negative"
+  },
+  {
+    "test_id": "WF-DEP-007",
+    "source_id": "BW-OAP-09 role-guard-student-scheduling-refused",
+    "purpose": "Verify workflow role guard: Student is unauthorized to execute the SCHEDULE or REJECT event.",
+    "preconditions": "Request in AWAITING_SCHEDULING exists. Authenticated actor is student.",
+    "action_or_input": "Student attempts to invoke SCHEDULE or REJECT action on the request.",
+    "expected_result": "Action is refused by permission guard and status remains AWAITING_SCHEDULING.",
+    "test_type": "Workflow / Role Guard"
+  }
+]

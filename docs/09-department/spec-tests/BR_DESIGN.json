@@ -1,0 +1,83 @@
+[
+  {
+    "test_id": "BR-DEP-001",
+    "source_id": "OA-BR-61 condition-true (M.Tech)",
+    "purpose": "Verify OA-BR-61 permits an M.Tech postgraduate student to request a graduate seminar.",
+    "preconditions": "Student with programme='M.Tech' is authenticated.",
+    "action_or_input": "Validate eligibility / submit seminar request for M.Tech student.",
+    "expected_result": "Eligibility check passes (allowed=True); request successfully enters AWAITING_SCHEDULING.",
+    "test_type": "Business Rule / Boundary Positive"
+  },
+  {
+    "test_id": "BR-DEP-002",
+    "source_id": "OA-BR-61 condition-true (PhD)",
+    "purpose": "Verify OA-BR-61 permits a Ph.D. research scholar to request a graduate seminar.",
+    "preconditions": "Student with programme='Ph.D.' is authenticated.",
+    "action_or_input": "Validate eligibility / submit seminar request for Ph.D. student.",
+    "expected_result": "Eligibility check passes (allowed=True); request successfully enters AWAITING_SCHEDULING.",
+    "test_type": "Business Rule / Boundary Positive"
+  },
+  {
+    "test_id": "BR-DEP-003",
+    "source_id": "OA-BR-61 condition-true (M.Des)",
+    "purpose": "Verify OA-BR-61 permits an M.Des postgraduate student to request a graduate seminar.",
+    "preconditions": "Student with programme='M.Des' is authenticated.",
+    "action_or_input": "Validate eligibility / submit seminar request for M.Des student.",
+    "expected_result": "Eligibility check passes (allowed=True); request successfully enters AWAITING_SCHEDULING.",
+    "test_type": "Business Rule / Boundary Positive"
+  },
+  {
+    "test_id": "BR-DEP-004",
+    "source_id": "OA-BR-61 condition-false (B.Tech)",
+    "purpose": "Verify OA-BR-61 strictly prohibits undergraduate (B.Tech) students from requesting graduate seminars.",
+    "preconditions": "Student with programme='B.Tech' is authenticated.",
+    "action_or_input": "Validate eligibility / submit seminar request for B.Tech student.",
+    "expected_result": "Eligibility check fails (allowed=False); submission is rejected with validation error.",
+    "test_type": "Business Rule / Boundary Negative"
+  },
+  {
+    "test_id": "BR-DEP-005",
+    "source_id": "OA-BR-61 condition-false (Empty/Null programme)",
+    "purpose": "Verify OA-BR-61 fails closed when programme is unspecified or null.",
+    "preconditions": "User context with programme=None or empty string.",
+    "action_or_input": "Invoke eligibility validator check_seminar_eligibility(None).",
+    "expected_result": "allowed=False with clear explanatory reason indicating postgraduate standing required.",
+    "test_type": "Business Rule / Fail-closed"
+  },
+  {
+    "test_id": "BR-DEP-006",
+    "source_id": "OA-BR-62 audit-logging",
+    "purpose": "Verify OA-BR-62 mandates automatic creation of an audit log entry when a seminar is scheduled.",
+    "preconditions": "A request in AWAITING_SCHEDULING exists. Department Administrator schedules the seminar.",
+    "action_or_input": "Schedule request via service or API.",
+    "expected_result": "SeminarSchedulingHistory record is created containing action='SCHEDULED', valid recorded_by_id, and details.",
+    "test_type": "Business Rule / Audit Requirement"
+  },
+  {
+    "test_id": "BR-DEP-007",
+    "source_id": "OA-BR-62 log-persistence",
+    "purpose": "Verify OA-BR-62 history log is linked to the GraduateSeminar and persists all scheduling actions.",
+    "preconditions": "Seminar is scheduled and history log is recorded.",
+    "action_or_input": "Inspect history_logs relationship on GraduateSeminar.",
+    "expected_result": "history_logs queryset contains the audit record referencing the exact seminar instance.",
+    "test_type": "Business Rule / Data Integrity"
+  },
+  {
+    "test_id": "BR-DEP-008",
+    "source_id": "OA-BR-51 allocation-integrity (TA Target)",
+    "purpose": "Verify OA-BR-51 ensures a TA allocation must link to a course, a faculty member, or both.",
+    "preconditions": "Department Administrator creates TA allocation.",
+    "action_or_input": "Submit TA allocation with valid course_code and/or faculty_id.",
+    "expected_result": "TA allocation record successfully validates and persists.",
+    "test_type": "Business Rule / Integrity"
+  },
+  {
+    "test_id": "BR-DEP-009",
+    "source_id": "OA-BR-63 visibility-scheduled-only",
+    "purpose": "Verify OA-BR-63 ensures public calendar displays only seminars in SCHEDULED status.",
+    "preconditions": "Requests exist across statuses: AWAITING_SCHEDULING, SCHEDULED, REJECTED, CANCELLED.",
+    "action_or_input": "Query public seminar calendar listing.",
+    "expected_result": "Only the SCHEDULED seminar appears; pending, rejected, and cancelled requests are not exposed.",
+    "test_type": "Business Rule / Visibility Restriction"
+  }
+]

@@ -1,0 +1,110 @@
+[
+  {
+    "test_id": "FR-DEP-001",
+    "source_id": "CFR-OAP-019 / AFR-OAP-043 - supervisor assignment",
+    "purpose": "Verify Department Administrator can record a thesis supervisor assignment for a postgraduate student.",
+    "preconditions": "Department Administrator is authenticated with department.allocation.manage permission. A PG student (M.Tech) and a faculty member exist.",
+    "action_or_input": "POST /api/department/allocations/supervisors/ with student_id, student_name, programme='M.Tech', department='CSE', supervisor_id, supervisor_name.",
+    "expected_result": "Allocation record is created with HTTP 201 Created and persisted in database.",
+    "test_type": "Functional / Positive"
+  },
+  {
+    "test_id": "FR-DEP-002",
+    "source_id": "CFR-OAP-019 / AFR-OAP-043 - unauthorized supervisor assignment",
+    "purpose": "Verify a non-admin student or unauthorized user cannot record a thesis supervisor assignment.",
+    "preconditions": "A standard student is authenticated without department.allocation.manage permission.",
+    "action_or_input": "POST /api/department/allocations/supervisors/ with supervisor assignment payload.",
+    "expected_result": "Request is refused with HTTP 403 Forbidden and no record is created.",
+    "test_type": "Authorization / Negative"
+  },
+  {
+    "test_id": "FR-DEP-003",
+    "source_id": "CFR-OAP-019 / AFR-OAP-044 - TA assignment to course and faculty",
+    "purpose": "Verify Department Administrator can record a TA assignment linking a PG student to both a course and a faculty member.",
+    "preconditions": "Department Administrator is authenticated. PG student and faculty exist.",
+    "action_or_input": "POST /api/department/allocations/ta/ with student_id, course_code='CS301', course_name='Operating Systems', faculty_id, faculty_name, hours_per_week=8.",
+    "expected_result": "TA allocation is created with HTTP 201 Created with both course and faculty associated.",
+    "test_type": "Functional / Positive"
+  },
+  {
+    "test_id": "FR-DEP-004",
+    "source_id": "CFR-OAP-019 / AFR-OAP-044 - TA assignment to course only",
+    "purpose": "Verify Department Administrator can record a TA assignment linked to a course/subject only without a designated faculty member.",
+    "preconditions": "Department Administrator is authenticated.",
+    "action_or_input": "POST /api/department/allocations/ta/ with student_id, course_code='CS101', course_name='Intro to Programming', faculty_id=null, faculty_name=''.",
+    "expected_result": "TA allocation is created with HTTP 201 Created associating student to course only.",
+    "test_type": "Functional / Positive"
+  },
+  {
+    "test_id": "FR-DEP-005",
+    "source_id": "CFR-OAP-019 / AFR-OAP-044 - TA assignment to faculty only",
+    "purpose": "Verify Department Administrator can record a TA assignment linked to a faculty member only.",
+    "preconditions": "Department Administrator is authenticated.",
+    "action_or_input": "POST /api/department/allocations/ta/ with student_id, course_code='', course_name='Department Research Lab', faculty_id=201, faculty_name='Dr. Sharma'.",
+    "expected_result": "TA allocation is created with HTTP 201 Created associating student to faculty member.",
+    "test_type": "Functional / Positive"
+  },
+  {
+    "test_id": "FR-DEP-006",
+    "source_id": "CFR-OAP-020 / AFR-OAP-045 - PG student initiates seminar request",
+    "purpose": "Verify a postgraduate student can initiate a graduate seminar scheduling request with topic, abstract, and preferred date.",
+    "preconditions": "PG student (Ph.D.) is authenticated with department.seminar.request permission.",
+    "action_or_input": "POST /api/department/requests/ with topic, abstract, discipline='CSE', preferred_date in future.",
+    "expected_result": "Request is created with HTTP 201 Created, status='AWAITING_SCHEDULING', and student details populated.",
+    "test_type": "Functional / Positive"
+  },
+  {
+    "test_id": "FR-DEP-007",
+    "source_id": "CFR-OAP-020 / AFR-OAP-045 - Undergraduate student prohibited",
+    "purpose": "Verify an undergraduate student (B.Tech) attempting to initiate a seminar scheduling request is rejected.",
+    "preconditions": "Undergraduate student (programme='B.Tech') is authenticated.",
+    "action_or_input": "POST /api/department/requests/ with seminar request payload.",
+    "expected_result": "Request is rejected with HTTP 400 Bad Request or 403 Forbidden stating PG scope violation.",
+    "test_type": "Validation / Negative"
+  },
+  {
+    "test_id": "FR-DEP-008",
+    "source_id": "CFR-OAP-020 / AFR-OAP-046 - Pending requests available to Department Administrator",
+    "purpose": "Verify submitted graduate seminar requests in AWAITING_SCHEDULING status are listed in the Department Administrator pending queue.",
+    "preconditions": "A seminar request has been submitted by a PG student and is in AWAITING_SCHEDULING status. Department Administrator is authenticated.",
+    "action_or_input": "GET /api/department/pending/",
+    "expected_result": "Response contains HTTP 200 OK with the pending seminar request in the results list.",
+    "test_type": "Functional / Query"
+  },
+  {
+    "test_id": "FR-DEP-009",
+    "source_id": "CFR-OAP-021 / AFR-OAP-047 - Department Administrator schedules seminar",
+    "purpose": "Verify Department Administrator can schedule a pending graduate seminar request by assigning date, time, venue, and chair.",
+    "preconditions": "A request in AWAITING_SCHEDULING status exists. Department Administrator is authenticated with department.seminar.schedule.",
+    "action_or_input": "POST /api/department/requests/{id}/schedule/ with scheduled_date, start_time, end_time, venue, session_chair, remarks.",
+    "expected_result": "Request transitions to SCHEDULED, GraduateSeminar record is created with HTTP 200 OK or 201 Created.",
+    "test_type": "Functional / Positive"
+  },
+  {
+    "test_id": "FR-DEP-010",
+    "source_id": "CFR-OAP-021 / AFR-OAP-048 - Audit history log maintained on scheduling",
+    "purpose": "Verify system records an audit history entry in SeminarSchedulingHistory whenever a seminar is scheduled.",
+    "preconditions": "A seminar request is successfully scheduled by Department Administrator.",
+    "action_or_input": "Query SeminarSchedulingHistory records for the scheduled seminar.",
+    "expected_result": "Audit history record exists with action='SCHEDULED', timestamp, and administrator's ID.",
+    "test_type": "Functional / Audit"
+  },
+  {
+    "test_id": "FR-DEP-011",
+    "source_id": "CFR-OAP-022 / AFR-OAP-049 - PG students and faculty view scheduled seminars",
+    "purpose": "Verify PG students and faculty members can view scheduled seminars via the public seminar calendar.",
+    "preconditions": "At least one GraduateSeminar is scheduled. Authenticated student or faculty calls list endpoint.",
+    "action_or_input": "GET /api/department/seminars/",
+    "expected_result": "HTTP 200 OK returned with scheduled seminar list; requests still in AWAITING_SCHEDULING or REJECTED are excluded.",
+    "test_type": "Functional / Query"
+  },
+  {
+    "test_id": "FR-DEP-012",
+    "source_id": "CFR-OAP-022 / AFR-OAP-050 - Department announcement publishing and visibility",
+    "purpose": "Verify Department Administrator can publish announcements and campus members can view them.",
+    "preconditions": "Department Administrator is authenticated with department.announcement.publish.",
+    "action_or_input": "POST /api/department/announcements/ with title, content, target_audience='ALL', then GET /api/department/announcements/.",
+    "expected_result": "Announcement created with HTTP 201 and returned in public announcement listing with HTTP 200.",
+    "test_type": "Functional / Positive"
+  }
+]

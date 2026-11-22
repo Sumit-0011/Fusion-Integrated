@@ -1,0 +1,83 @@
+[
+  {
+    "test_id": "UC-DEP-001",
+    "source_id": "OA-UC-51 Main Flow - Request Graduate Seminar",
+    "purpose": "Verify main success flow of OA-UC-51 where an eligible PG student successfully submits a graduate seminar request.",
+    "preconditions": "Postgraduate student (M.Tech) is logged in with valid session.",
+    "action_or_input": "Student submits seminar request with topic='Distributed Consensus in Fusion ERP', abstract='Analysis of Raft and Paxos...', discipline='CSE', preferred_date='future date'.",
+    "expected_result": "Request record is created with status AWAITING_SCHEDULING; confirmation returned to student.",
+    "test_type": "Use Case / Main Flow"
+  },
+  {
+    "test_id": "UC-DEP-002",
+    "source_id": "OA-UC-51 Alternative A1 - Non-PG Student Ineligibility",
+    "purpose": "Verify alternative exception flow of OA-UC-51 where an ineligible non-postgraduate student attempts to request a seminar.",
+    "preconditions": "Student enrolled in undergraduate B.Tech programme is logged in.",
+    "action_or_input": "Student attempts to submit a seminar scheduling request.",
+    "expected_result": "System refuses request with validation error stating postgraduate standing is required; no request is stored.",
+    "test_type": "Use Case / Exception Flow"
+  },
+  {
+    "test_id": "UC-DEP-003",
+    "source_id": "OA-UC-51 Alternative A2 - Missing Required Fields",
+    "purpose": "Verify validation exception flow of OA-UC-51 when mandatory fields such as topic or abstract are omitted.",
+    "preconditions": "Eligible PG student is logged in.",
+    "action_or_input": "Student submits request with empty topic and abstract.",
+    "expected_result": "System returns HTTP 400 Bad Request with field validation errors; request is not created.",
+    "test_type": "Use Case / Validation Flow"
+  },
+  {
+    "test_id": "UC-DEP-004",
+    "source_id": "OA-UC-53 Main Flow - Schedule Graduate Seminar",
+    "purpose": "Verify main success flow of OA-UC-53 where Department Administrator schedules an awaiting seminar request.",
+    "preconditions": "A seminar request in AWAITING_SCHEDULING status exists. Department Administrator is logged in.",
+    "action_or_input": "Administrator provides scheduled_date, start_time='10:00:00', end_time='11:30:00', venue='Seminar Hall A', session_chair='Prof. A. Kumar', remarks='Approved by DRC'.",
+    "expected_result": "GraduateSeminar record is generated, request status transitions to SCHEDULED, and audit history log is recorded.",
+    "test_type": "Use Case / Main Flow"
+  },
+  {
+    "test_id": "UC-DEP-005",
+    "source_id": "OA-UC-53 Alternative A1 - Reject Seminar Request",
+    "purpose": "Verify alternative flow of OA-UC-53 where Department Administrator rejects a pending seminar request with justification remarks.",
+    "preconditions": "A seminar request in AWAITING_SCHEDULING status exists. Department Administrator is logged in.",
+    "action_or_input": "Administrator submits rejection action with remarks='Topic requires further research proposal approval'.",
+    "expected_result": "Request status transitions to REJECTED with rejection remarks saved; no GraduateSeminar is scheduled.",
+    "test_type": "Use Case / Alternative Flow"
+  },
+  {
+    "test_id": "UC-DEP-006",
+    "source_id": "OA-UC-53 Alternative A2 - Non-Admin Unauthorized Scheduling Attempt",
+    "purpose": "Verify security exception flow of OA-UC-53 where a non-administrator attempts to schedule a seminar.",
+    "preconditions": "Standard student or faculty member without scheduling authority is logged in.",
+    "action_or_input": "User attempts POST to schedule endpoint for a pending request.",
+    "expected_result": "Action is refused with HTTP 403 Forbidden; request status remains unchanged.",
+    "test_type": "Use Case / Security Flow"
+  },
+  {
+    "test_id": "UC-DEP-007",
+    "source_id": "OA-UC-54 Main Flow - View Seminar Schedule",
+    "purpose": "Verify main success flow of OA-UC-54 where campus users view public schedule of confirmed graduate seminars.",
+    "preconditions": "Confirmed scheduled seminars exist in the system.",
+    "action_or_input": "User requests seminar calendar listing.",
+    "expected_result": "System returns list of scheduled seminars showing speaker name, date, time, venue, and title.",
+    "test_type": "Use Case / Main Flow"
+  },
+  {
+    "test_id": "UC-DEP-008",
+    "source_id": "OA-UC-41 Main Flow - Record Thesis Supervisor Allocation",
+    "purpose": "Verify main success flow of OA-UC-41 where Department Administrator records research supervisor allocation for PG scholar.",
+    "preconditions": "Department Administrator is logged in. Research scholar exists in department.",
+    "action_or_input": "Administrator submits supervisor allocation: student_id, student_name, supervisor_id, supervisor_name, thesis_topic='Quantum Computing'.",
+    "expected_result": "Supervisor allocation record is created in ACTIVE status with confirmation message.",
+    "test_type": "Use Case / Main Flow"
+  },
+  {
+    "test_id": "UC-DEP-009",
+    "source_id": "OA-UC-42 Main Flow - Record TA Allocation",
+    "purpose": "Verify main success flow of OA-UC-42 where Department Administrator records teaching assistant assignment.",
+    "preconditions": "Department Administrator is logged in. PG student eligible for assistantship exists.",
+    "action_or_input": "Administrator submits TA allocation: student_id, course_code='CS202', course_name='Data Structures', faculty_id=102, hours_per_week=10.",
+    "expected_result": "TA allocation record is created with HTTP 201 Created.",
+    "test_type": "Use Case / Main Flow"
+  }
+]
